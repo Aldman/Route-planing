@@ -16,7 +16,7 @@ namespace RoutePlanning
             return bestOrder;
         }
 
-        private static void MakeBestPermutation(Point[] checkpoints,
+        public static void MakeBestPermutation(Point[] checkpoints,
             int[] randomPermutation, ref int[] bestPermutation,
             ref double bestDistance, int position = 0)
         {
@@ -72,7 +72,7 @@ namespace RoutePlanning
             return totalDistance;
         }
 
-        private static int[] MakeTrivialPermutation(int size)
+        public static int[] MakeTrivialPermutation(int size)
 		{
 			var bestOrder = new int[size];
 			for (int i = 0; i < bestOrder.Length; i++)
