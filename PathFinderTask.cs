@@ -10,12 +10,12 @@ namespace RoutePlanning
         public static int[] FindBestCheckpointsOrder(Point[] checkpoints)
         {
             var bestOrder = MakeTrivialPermutation(checkpoints.Length);
-            MakeBestPermutation(checkpoints, bestOrder.ToArray(), bestOrder);
+            MakeBestPermutation(checkpoints, bestOrder.ToArray(), ref bestOrder);
             return bestOrder;
         }
 
         private static void MakeBestPermutation(Point[] checkpoints,
-            int[] randomPermutation, int[] bestPermutation, int position = 0)
+            int[] randomPermutation, ref int[] bestPermutation, int position = 0)
         {
             if(position == randomPermutation.Length)
             {
@@ -36,7 +36,7 @@ namespace RoutePlanning
                     {
                         randomPermutation[position] = i;
                         MakeBestPermutation(checkpoints, randomPermutation,
-                            bestPermutation, position + 1);
+                            ref bestPermutation, position + 1);
                     }
                 }
             }
@@ -57,28 +57,6 @@ namespace RoutePlanning
             }
             return totalDistance;
         }
-
-        public static void MakePermutations(int[] permutation, int position, List<int[]> result)
-        {
-            if (position == permutation.Length)
-            {
-                result.Add(permutation.ToArray());
-                return;
-            }
-            else
-            {
-                for (int i = 0; i < permutation.Length; i++)
-                {
-                    var index = Array.IndexOf(permutation, i, 0, position);
-                    if (index == -1)
-                    {
-                        permutation[position] = i;
-                        MakePermutations(permutation, position + 1, result);
-                    }
-                }
-            }
-        }
-
 
         private static int[] MakeTrivialPermutation(int size)
 		{
