@@ -10,12 +10,15 @@ namespace RoutePlanning
         public static int[] FindBestCheckpointsOrder(Point[] checkpoints)
         {
             var bestOrder = MakeTrivialPermutation(checkpoints.Length);
-            MakeBestPermutation(checkpoints, bestOrder.ToArray(), ref bestOrder);
+            var bestDistance = double.MaxValue;
+            MakeBestPermutation(checkpoints, bestOrder.ToArray(),
+                ref bestOrder, ref bestDistance);
             return bestOrder;
         }
 
         private static void MakeBestPermutation(Point[] checkpoints,
-            int[] randomPermutation, ref int[] bestPermutation, int position = 0)
+            int[] randomPermutation, ref int[] bestPermutation,
+            ref double bestDistance, int position = 0)
         {
             if(position == randomPermutation.Length)
             {
@@ -24,7 +27,10 @@ namespace RoutePlanning
                 var bestPermutationDistance =
                     GetPathLength(checkpoints, bestPermutation);
                 if (randomPermutationDistance < bestPermutationDistance)
+                {
+                    bestDistance = randomPermutationDistance;
                     bestPermutation = randomPermutation.ToArray();
+                }
                 return;
             }
             else
@@ -35,8 +41,16 @@ namespace RoutePlanning
                     if (index == -1)
                     {
                         randomPermutation[position] = i;
+                        if (position > 0)
+                        {
+                            var currentState = new int[position + 1];
+                            Array.Copy(randomPermutation, currentState, position + 1);
+                            var currentDistance = GetPathLength(checkpoints, currentState);
+                            if (currentDistance > bestDistance)
+                                return;
+                        }
                         MakeBestPermutation(checkpoints, randomPermutation,
-                            ref bestPermutation, position + 1);
+                            ref bestPermutation, ref bestDistance, position + 1);
                     }
                 }
             }
