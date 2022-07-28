@@ -46,7 +46,6 @@ namespace RoutePlanning
             int[] randomPermutation, int[] bestPermutation,
             double bestDistance, double expectedResult, int position = 0)
         {
-            ;
             PathFinderTask
                 .MakeBestPermutation(checkpoints, randomPermutation,
                 ref bestPermutation, ref bestDistance);

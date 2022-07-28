@@ -18,14 +18,14 @@ namespace RoutePlanning
 
         public static void MakeBestPermutation(Point[] checkpoints,
             int[] randomPermutation, ref int[] bestPermutation,
-            ref double bestDistance, int position = 0)
+            ref double bestDistance, int position = 1)
         {
             if(position == randomPermutation.Length)
             {
                 var randomPermutationDistance =
-                    GetPathLength(checkpoints, randomPermutation);
+                    PointExtensions.GetPathLength(checkpoints, randomPermutation);
                 var bestPermutationDistance =
-                    GetPathLength(checkpoints, bestPermutation);
+                    PointExtensions.GetPathLength(checkpoints, bestPermutation);
                 if (randomPermutationDistance < bestPermutationDistance)
                 {
                     bestDistance = randomPermutationDistance;
@@ -45,7 +45,7 @@ namespace RoutePlanning
                         {
                             var currentState = new int[position + 1];
                             Array.Copy(randomPermutation, currentState, position + 1);
-                            var currentDistance = GetPathLength(checkpoints, currentState);
+                            var currentDistance = PointExtensions.GetPathLength(checkpoints, currentState);
                             if (currentDistance > bestDistance)
                                 return;
                         }
@@ -54,22 +54,6 @@ namespace RoutePlanning
                     }
                 }
             }
-        }
-
-        private static double GetPathLength(Point[] checkpoints, int[] permutation)
-        {
-            double totalDistance = 0;
-            if (permutation.Length > 1)
-            {
-                for (int i = 1; i < permutation.Length; i++)
-                {
-                    var pointA = checkpoints[permutation[i - 1]];
-                    var pointB = checkpoints[permutation[i]];
-                    totalDistance += PointExtensions
-                        .DistanceTo(pointA, pointB);
-                }
-            }
-            return totalDistance;
         }
 
         public static int[] MakeTrivialPermutation(int size)
